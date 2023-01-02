@@ -4,15 +4,18 @@ import {
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
-import Stacks from "./navigation/Stacks";
-import Tabs from "./navigation/Tabs";
 import Root from "./navigation/Root";
 import { useColorScheme } from "react-native";
+import { ThemeProvider } from "@emotion/react";
+import { darkTheme, lightTheme } from "./theme";
 
 export default function App() {
+  const isDark = useColorScheme() === "dark";
   return (
-    <NavigationContainer>
-      <Root />
-    </NavigationContainer>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+        <Root />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
