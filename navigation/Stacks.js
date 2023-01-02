@@ -4,7 +4,7 @@ import { Text, TouchableOpacity } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
-const One = ({ navigation: { navigate } }) => {
+const One = ({ route: { params }, navigation: { navigate } }) => {
   return (
     <TouchableOpacity onPress={() => navigate("two")}>
       <Text>One</Text>
