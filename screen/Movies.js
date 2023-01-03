@@ -11,6 +11,7 @@ import styled from "@emotion/native";
 import { SCREEN_HEIGHT } from "../util";
 import { LinearGradient } from "expo-linear-gradient";
 import { GREY_COLOR } from "../colors";
+import Swiper from "react-native-swiper";
 
 export default function Movies({ navigation: { navigate } }) {
   const title = "영화제목쓰";
@@ -19,28 +20,74 @@ export default function Movies({ navigation: { navigate } }) {
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
   return (
     <ScrollView>
-      <SwiperChildView>
-        <BackgroundImg
-          style={StyleSheet.absoluteFill}
-          // style={{ position: "absolute", top: 0, left: 0 }}
-          source={require("../assets/sampleImg.jpg")}
-        />
-        <LinearGradient
-          style={StyleSheet.absoluteFill}
-          colors={["transparent", "black"]}
-        />
-        <Row>
-          <Poster source={require("../assets/sampleImg.jpg")} />
-          <Column>
-            <Title>{title}</Title>
-            <Rating>⭐️{rating}/10</Rating>
-            <Overview>
-              {overview.slice(0, 150)}
-              {overview.length > 150 && "..."}
-            </Overview>
-          </Column>
-        </Row>
-      </SwiperChildView>
+      <Swiper height="100%" showsPagination={false} autoplay loop>
+        <SwiperChildView>
+          <BackgroundImg
+            style={StyleSheet.absoluteFill}
+            // style={{ position: "absolute", top: 0, left: 0 }}
+            source={require("../assets/sampleImg.jpg")}
+          />
+          <LinearGradient
+            style={StyleSheet.absoluteFill}
+            colors={["transparent", "black"]}
+          />
+          <Row>
+            <Poster source={require("../assets/sampleImg.jpg")} />
+            <Column>
+              <Title>{title}</Title>
+              <Rating>⭐️{rating}/10</Rating>
+              <Overview>
+                {overview.slice(0, 150)}
+                {overview.length > 150 && "..."}
+              </Overview>
+            </Column>
+          </Row>
+        </SwiperChildView>
+        <SwiperChildView>
+          <BackgroundImg
+            style={StyleSheet.absoluteFill}
+            // style={{ position: "absolute", top: 0, left: 0 }}
+            source={require("../assets/sampleImg.jpg")}
+          />
+          <LinearGradient
+            style={StyleSheet.absoluteFill}
+            colors={["transparent", "black"]}
+          />
+          <Row>
+            <Poster source={require("../assets/sampleImg.jpg")} />
+            <Column>
+              <Title>{title}</Title>
+              <Rating>⭐️{rating}/10</Rating>
+              <Overview>
+                {overview.slice(0, 150)}
+                {overview.length > 150 && "..."}
+              </Overview>
+            </Column>
+          </Row>
+        </SwiperChildView>
+        <SwiperChildView>
+          <BackgroundImg
+            style={StyleSheet.absoluteFill}
+            // style={{ position: "absolute", top: 0, left: 0 }}
+            source={require("../assets/sampleImg.jpg")}
+          />
+          <LinearGradient
+            style={StyleSheet.absoluteFill}
+            colors={["transparent", "black"]}
+          />
+          <Row>
+            <Poster source={require("../assets/sampleImg.jpg")} />
+            <Column>
+              <Title>{title}</Title>
+              <Rating>⭐️{rating}/10</Rating>
+              <Overview>
+                {overview.slice(0, 150)}
+                {overview.length > 150 && "..."}
+              </Overview>
+            </Column>
+          </Row>
+        </SwiperChildView>
+      </Swiper>
       <ListTitle>Top Rated Movies</ListTitle>
       <ScrollView
         horizontal
