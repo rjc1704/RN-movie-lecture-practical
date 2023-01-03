@@ -1,10 +1,8 @@
-import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, RefreshControl, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import styled from "@emotion/native";
 import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
-import { getImgPath } from "../util";
 import VCard from "../components/VCard";
 import HCard from "../components/HCard";
 
@@ -61,31 +59,34 @@ export default function Movies({ navigation: { navigate } }) {
   }
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+    <FlatList
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+      ListHeaderComponent={
+        <>
+          <Swiper height="100%" showsPagination={false} autoplay loop>
+            {nowPlayings.map((movie) => (
+              <Slide key={movie.id} movie={movie} />
+            ))}
+          </Swiper>
+          <ListTitle>Top Rated Movies</ListTitle>
+          <FlatList
+            horizontal
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+            showsHorizontalScrollIndicator={false}
+            data={topRateds}
+            renderItem={({ item }) => <VCard movie={item} />}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={<View style={{ width: 10 }} />}
+          />
+          <ListTitle>Upcoming Movies</ListTitle>
+        </>
       }
-    >
-      <Swiper height="100%" showsPagination={false} autoplay loop>
-        {nowPlayings.map((movie) => (
-          <Slide key={movie.id} movie={movie} />
-        ))}
-      </Swiper>
-      <ListTitle>Top Rated Movies</ListTitle>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
-      >
-        {topRateds.map((movie) => (
-          <VCard key={movie.id} movie={movie} />
-        ))}
-      </ScrollView>
-      <ListTitle>Upcoming Movies</ListTitle>
-      {upcomings.map((movie) => (
-        <HCard key={movie.id} movie={movie} />
-      ))}
-    </ScrollView>
+      data={upcomings}
+      renderItem={({ item }) => <HCard movie={item} />}
+      keyExtractor={(item) => item.id}
+      ItemSeparatorComponent={<View style={{ height: 15 }} />}
+    />
   );
 }
 
