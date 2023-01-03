@@ -3,9 +3,11 @@ import { StyleSheet } from "react-native";
 import { getImgPath, SCREEN_HEIGHT } from "../util";
 import styled from "@emotion/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 export default function Slide({ movie }) {
+  const { navigate } = useNavigation();
   return (
-    <SwiperChildView key={movie.id}>
+    <SwiperChildView>
       <BackgroundImg
         style={StyleSheet.absoluteFill}
         // style={{ position: "absolute", top: 0, left: 0 }}
@@ -17,7 +19,14 @@ export default function Slide({ movie }) {
         style={StyleSheet.absoluteFill}
         colors={["transparent", "black"]}
       />
-      <Row>
+      <Row
+        onPress={() =>
+          navigate("Stacks", {
+            screen: "Detail",
+            params: { movieId: movie.id },
+          })
+        }
+      >
         <Poster
           source={{
             uri: getImgPath(movie.poster_path || ""),
@@ -35,7 +44,7 @@ export default function Slide({ movie }) {
     </SwiperChildView>
   );
 }
-const SwiperChildView = styled.View`
+const SwiperChildView = styled.TouchableOpacity`
   flex: 1;
   justify-content: flex-end;
   height: ${SCREEN_HEIGHT / 3 + "px"};

@@ -1,10 +1,17 @@
 import React from "react";
 import styled from "@emotion/native";
 import { getImgPath } from "../util";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HCard({ movie }) {
+  const { navigate } = useNavigation();
   return (
-    <UpcomingRow key={movie.id} onPress={() => {}}>
+    <UpcomingRow
+      key={movie.id}
+      onPress={() =>
+        navigate("Stacks", { screen: "Detail", params: { movieId: movie.id } })
+      }
+    >
       <UpcomingPoster source={{ uri: getImgPath(movie.poster_path) }} />
       <UpcomingColumn>
         <UpcomingTitle>{movie.title}</UpcomingTitle>
