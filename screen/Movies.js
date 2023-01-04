@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, View } from "react-native";
 import styled from "@emotion/native";
 import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
 import VCard from "../components/VCard";
 import HCard from "../components/HCard";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient, useInfiniteQuery } from "react-query";
 import { getNowPlaying, getTopRated, getUpcoming } from "../api";
 
 export default function Movies({ navigation: { navigate } }) {
@@ -21,10 +21,18 @@ export default function Movies({ navigation: { navigate } }) {
     ["Movies", "TopRated"],
     getTopRated
   );
-  const { data: upcomingData, isLoading: isLoadingUC } = useQuery(
-    ["Movies", "Upcoming"],
-    getUpcoming
-  );
+  const {
+    data: upcomingData,
+    isLoading: isLoadingUC,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(["Movies", "Upcoming"], getUpcoming, {
+    getNextPageParam: (lastPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return lastPage.page + 1;
+      }
+    },
+  });
 
   const onRefresh = async () => {
     setIsRefreshing(true);
@@ -34,6 +42,13 @@ export default function Movies({ navigation: { navigate } }) {
   };
 
   const isLoading = isLoadingNP || isLoadingTR || isLoadingUC;
+
+  const fetchMore = async () => {
+    // fetch next page!
+    if (hasNextPage) {
+      await fetchNextPage();
+    }
+  };
 
   if (isLoading) {
     return (
@@ -45,6 +60,8 @@ export default function Movies({ navigation: { navigate } }) {
 
   return (
     <FlatList
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.5}
       refreshing={isRefreshing}
       onRefresh={onRefresh}
       ListHeaderComponent={
@@ -67,7 +84,7 @@ export default function Movies({ navigation: { navigate } }) {
           <ListTitle>Upcoming Movies</ListTitle>
         </>
       }
-      data={upcomingData.results}
+      data={upcomingData.pages.map((page) => page.results).flat()}
       renderItem={({ item }) => <HCard movie={item} />}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={<View style={{ height: 15 }} />}
