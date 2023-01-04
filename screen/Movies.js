@@ -5,50 +5,35 @@ import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
 import VCard from "../components/VCard";
 import HCard from "../components/HCard";
+import { useQuery, useQueryClient } from "react-query";
+import { getNowPlaying, getTopRated, getUpcoming } from "../api";
 
 export default function Movies({ navigation: { navigate } }) {
-  const [nowPlayings, setNowPlayings] = useState([]);
-  const [topRateds, setTopRateds] = useState([]);
-  const [upcomings, setUpcomings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const queryClient = useQueryClient();
 
-  const API_KEY = "558a876e694085f8a052d267914acde2";
-  const BASE_URL = "https://api.themoviedb.org/3/movie";
-  const getNowPlaying = async () => {
-    const { results } = await fetch(
-      `${BASE_URL}/now_playing?api_key=${API_KEY}&language=en-US&page=1`
-    ).then((res) => res.json());
-    setNowPlayings(results);
-  };
-  const getTopRated = async () => {
-    const { results } = await fetch(
-      `${BASE_URL}/top_rated?api_key=${API_KEY}&language=en-US&page=1`
-    ).then((res) => res.json());
-
-    setTopRateds(results);
-  };
-  const getUpcoming = async () => {
-    const { results } = await fetch(
-      `${BASE_URL}/upcoming?api_key=${API_KEY}&language=en-US&page=1`
-    ).then((res) => res.json());
-    setUpcomings(results);
-  };
-
-  const getData = async () => {
-    await Promise.all([getNowPlaying(), getTopRated(), getUpcoming()]);
-    setIsLoading(false);
-  };
+  const {
+    data: nowPlayingData,
+    isLoading: isLoadingNP,
+    isRefetching,
+  } = useQuery(["Movies", "NowPlaying"], getNowPlaying);
+  const { data: topRatedData, isLoading: isLoadingTR } = useQuery(
+    ["Movies", "TopRated"],
+    getTopRated
+  );
+  const { data: upcomingData, isLoading: isLoadingUC } = useQuery(
+    ["Movies", "Upcoming"],
+    getUpcoming
+  );
 
   const onRefresh = async () => {
     setIsRefreshing(true);
-    await getData();
+    // await Promise.all([refetchNP(), refetchTR(), refetchUC()]);
+    await queryClient.refetchQueries(["Movies"]);
     setIsRefreshing(false);
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const isLoading = isLoadingNP || isLoadingTR || isLoadingUC;
 
   if (isLoading) {
     return (
@@ -65,7 +50,7 @@ export default function Movies({ navigation: { navigate } }) {
       ListHeaderComponent={
         <>
           <Swiper height="100%" showsPagination={false} autoplay loop>
-            {nowPlayings.map((movie) => (
+            {nowPlayingData.results.map((movie) => (
               <Slide key={movie.id} movie={movie} />
             ))}
           </Swiper>
@@ -74,7 +59,7 @@ export default function Movies({ navigation: { navigate } }) {
             horizontal
             contentContainerStyle={{ paddingHorizontal: 20 }}
             showsHorizontalScrollIndicator={false}
-            data={topRateds}
+            data={topRatedData.results}
             renderItem={({ item }) => <VCard movie={item} />}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={<View style={{ width: 10 }} />}
@@ -82,7 +67,7 @@ export default function Movies({ navigation: { navigate } }) {
           <ListTitle>Upcoming Movies</ListTitle>
         </>
       }
-      data={upcomings}
+      data={upcomingData.results}
       renderItem={({ item }) => <HCard movie={item} />}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={<View style={{ height: 15 }} />}
