@@ -1,22 +1,38 @@
 {
   "expo": {
+<<<<<<< HEAD
+    "name": "movie-rn-lecture-practical",
+    "slug": "movie-rn-lecture-practical",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+=======
     "name": "rn-lecture-practical",
     "slug": "rn-lecture-practical",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+>>>>>>> 25c96514defe8f4b0554682b82f275e84459901b
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+<<<<<<< HEAD
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/701e7a89-679e-4429-9df4-541c95bafac2"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
+=======
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+>>>>>>> 25c96514defe8f4b0554682b82f275e84459901b
     "ios": {
       "supportsTablet": true
     },
@@ -28,6 +44,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+<<<<<<< HEAD
+    },
+    "extra": {
+      "eas": {
+        "projectId": "701e7a89-679e-4429-9df4-541c95bafac2"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+=======
+>>>>>>> 25c96514defe8f4b0554682b82f275e84459901b
     }
   }
 }
